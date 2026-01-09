@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Mi resultado: {{.Score}}/{{.Total}} | English At Lima</title>
+    
+    <meta property="og:title" content="🎯 ¡Logré {{.Score}}/{{.Total}} en English At Lima!">
+    <meta property="og:description" content="Practica inglés gratis con frases, quizzes y recursos. ¿Puedes superar mi puntaje?">
+    <meta property="og:image" content="https://tu-web.vercel.app/static/logo.webp">
+    <meta property="og:url" content="https://tu-web.vercel.app/public">
+    <meta property="og:type" content="website">
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 50px 20px; background: #f0f2f5; color: #1c1e21; }
+        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: inline-block; max-width: 400px; width: 100%; }
+        .score { font-size: 64px; color: #10b981; font-weight: bold; margin: 20px 0; }
+        .btn { background: #25d366; color: white; padding: 12px 25px; text-decoration: none; border-radius: 50px; display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; font-weight: bold; transition: transform 0.2s; }
+        .btn:hover { transform: scale(1.05); }
+        .back-link { display: block; margin-top: 20px; color: #6366f1; text-decoration: none; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1 style="margin: 0; color: #1e293b;">¡Excelente trabajo!</h1>
+        <p style="color: #64748b;">Tu puntaje final es:</p>
+        <div class="score">{{.Score}} / {{.Total}}</div>
+        
+        <a href="https://api.whatsapp.com/send?text=%F0%9F%8E%AF%20%C2%A1Logr%C3%A9%20{{.Score}}%2F{{.Total}}%20puntos%20en%20English%20At%20Lima!%20%F0%9F%87%AC%F0%9F%87%A7%20Practica%20t%C3%BA%20tambi%C3%A9n%20aqu%C3%AD%3A%20https%3A%2F%2Ftu-web.vercel.app%2Fpublic" 
+           class="btn" target="_blank">
+           <span>🟢 Compartir en WhatsApp</span>
+        </a>
+
+        <a href="/public" class="back-link">← Volver a practicar</a>
+    </div>
+</body>
+</html>

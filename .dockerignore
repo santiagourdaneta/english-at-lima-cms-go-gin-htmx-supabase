@@ -1,0 +1,23 @@
+# Ejecutables de Go y Windows
+*.exe
+*.exe~
+english_admin
+english_admin_prod
+tmp/
+
+# Datos persistentes locales y Logs
+*.log
+*.db
+*.db-journal
+backup_sentences.json
+
+# Herramientas de Desarrollo
+.air.toml
+.git
+.gitignore
+build_prod.sh
+stress_test.go
+seed.sql
+
+# Secretos
+.env

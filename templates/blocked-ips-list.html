@@ -1,0 +1,22 @@
+<div style="background: #fff5f5; border: 1px solid #feb2b2; padding: 15px; border-radius: 8px; margin-top: 10px;">
+    <h4 style="margin-top: 0; color: #c53030;">🚫 IPs Bloqueadas (Últimos 15 min)</h4>
+    {{if .IPs}}
+        <ul style="padding-left: 20px;">
+            {{range .IPs}}
+                <li style="font-family: monospace; margin-bottom: 5px;">
+                    {{.}} - <span style="color: #e53e3e; font-size: 0.8em;">Fuerza Bruta detectada</span>
+                </li>
+            {{end}}
+        </ul>
+    {{else}}
+        <p style="font-size: 0.9em; color: #2f855a;">No hay IPs bloqueadas actualmente.</p>
+    {{end}}
+    <button onclick="this.parentElement.style.display='none'" style="background: #ccc; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Cerrar</button>
+    {{if .IPs}}
+    <button hx-post="/admin/security/unblock-all" 
+            hx-target="closest div" 
+            style="background: #4a5568; color: white; margin-top: 10px; width: 100%;">
+        🔓 Desbloquear todas las IPs
+    </button>
+    {{end}}
+</div>

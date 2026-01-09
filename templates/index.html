@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>English At Lima | Aprende Inglés Diariamente</title>
+    <meta name="description" content="Plataforma de práctica de inglés: Frases, Quizzes y Recursos gratuitos.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tu-app.railway.app/public">
+    <meta property="og:title" content="English At Lima - Practice Now">
+    <meta property="og:description" content="Mejora tu fluidez con nuestros ejercicios diarios.">
+    <meta property="og:image" content="./static/logo.webp">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="English At Lima">
+    <meta name="twitter:image" content="./static/logo.webp">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        :root { --primary: #6366f1; }
+        .card { padding: 1rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid #eee; }
+        .english-text { font-size: 1.2rem; font-weight: bold; color: var(--primary); }
+    </style>
+</head>
+<body class="container">
+    <header>
+        <h1>📖 English At Lima</h1>
+        <p>Tu dosis diaria de Inglés.</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>🗣️ Frases del día</h2>
+            {{range .Sentences}}
+            <div class="card">
+                <p class="english-text">{{.English}}</p>
+                <p>{{.Spanish}}</p>
+            </div>
+            {{end}}
+        </section>
+
+        <section>
+            <h2>📝 Practica con Quizzes</h2>
+            {{range .Quizzes}}
+            <div class="card">
+                <p><strong>{{.Question}}</strong></p>
+                </div>
+            {{end}}
+        </section>
+
+        <section id="resources-public">
+            <h2>📚 Recursos y Materiales</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                {{range .Resources}}
+                <article class="card" style="border-top: 4px solid #10b981;">
+                    <header style="padding: 0.5rem 0;">
+                        <span style="font-size: 1.5rem;">
+                            {{if eq .Type "video"}}🎥{{else if eq .Type "pdf"}}📎{{else}}🌐{{end}}
+                        </span>
+                        <strong>{{.Title}}</strong>
+                    </header>
+                    <p><small>Tipo: {{.Type}}</small></p>
+                    <footer>
+                        <a href="{{.URL}}" target="_blank" role="button" class="outline" style="width: 100%;">Abrir Recurso</a>
+                    </footer>
+                </article>
+                {{end}}
+            </div>
+        </section>
+    </main>
+</body>
+</html>

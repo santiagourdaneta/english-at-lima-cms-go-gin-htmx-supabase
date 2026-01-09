@@ -1,0 +1,11 @@
+<div class="card" style="border: 2px solid {{.Color}}; display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+    <span style="font-size: 1.5em;">{{if gt .Count 0}}🔔{{else}}🛡️{{end}}</span>
+    <div>
+        <strong>Estado de Seguridad:</strong> 
+        {{if gt .Count 0}}
+            <span style="color: #ef4444;">{{.Count}} IP(s) bloqueada(s) actualmente por ataques.</span>
+        {{else}}
+            <span style="color: #10b981;">Sistema seguro. Sin ataques detectados.</span>
+        {{end}}
+    </div>
+</div>

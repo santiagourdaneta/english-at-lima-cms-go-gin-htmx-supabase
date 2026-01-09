@@ -1,0 +1,41 @@
+<div id="quiz-{{.ID}}" class="card item" style="border: 2px solid #2563eb; background: #f8fafc; padding: 15px; animation: fadeIn 0.3s;">
+    <form hx-post="/admin/update/quiz" hx-target="#quiz-{{.ID}}" hx-swap="outerHTML">
+        <input type="hidden" name="id" value="{{.ID}}">
+        
+        <div style="margin-bottom: 10px;">
+            <label style="font-weight: bold; font-size: 0.8em;">Pregunta:</label>
+            <input type="text" name="question" value="{{.Question}}" style="width: 100%; padding: 5px;" required  maxlength="100">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <div>
+                <label style="font-size: 0.8em;">Opción 1:</label>
+                <input type="text" name="opt1" value="{{.Option1}}" style="width: 100%;" required maxlength="20">
+            </div>
+            <div>
+                <label style="font-size: 0.8em;">Opción 2:</label>
+                <input type="text" name="opt2" value="{{.Option2}}" style="width: 100%;" required maxlength="20">
+            </div>
+            <div>
+                <label style="font-size: 0.8em;">Opción 3:</label>
+                <input type="text" name="opt3" value="{{.Option3}}" style="width: 100%;" required maxlength="20">
+            </div>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: bold; font-size: 0.8em;">Opción Correcta (1, 2 o 3):</label>
+            <input type="number" name="correct" value="{{.Correct}}" min="1" max="3" style="width: 50px; padding: 5px;" required>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <button type="submit" style="background: #10b981; flex: 1;">✅ Guardar Quiz</button>
+            <button type="button" 
+                    hx-get="/admin/cancel/quiz?id={{.ID}}&question={{.Question}}&opt1={{.Option1}}&opt2={{.Option2}}&opt3={{.Option3}}&correct={{.Correct}}" 
+                    hx-target="#quiz-{{.ID}}" 
+                    hx-swap="outerHTML" 
+                    style="background: #6b7280; flex: 1;">
+                ❌ Cancelar
+            </button>
+        </div>
+    </form>
+</div>

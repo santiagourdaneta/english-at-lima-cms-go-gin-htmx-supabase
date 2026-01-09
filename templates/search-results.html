@@ -1,0 +1,10 @@
+{{if .Sentences}}
+    <p style="color: #666; font-size: 0.9em;">Resultados encontrados: {{len .Sentences}}</p>
+    {{range .Sentences}}
+        {{template "sentence-item.html" .}}
+    {{end}}
+{{else}}
+    <div class="card" style="text-align: center; color: #999;">
+        <p>No se encontraron frases que coincidan con la búsqueda.</p>
+    </div>
+{{end}}

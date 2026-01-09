@@ -1,0 +1,25 @@
+<div id="sentence-{{.ID}}" class="card item flash-update" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 12px; border-left: 4px solid #2563eb; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+    <div style="flex: 1; padding-right: 15px;">
+        <strong style="display:block; color: #1e293b; font-size: 1.1em;">{{.English}}</strong>
+        <span style="color: #64748b; font-size: 0.9em;">{{.Spanish}}</span>
+    </div>
+    
+    <div style="display: flex; gap: 8px;">
+        <button hx-get="/admin/edit/sentence?id={{.ID}}&english={{.English}}&spanish={{.Spanish}}" 
+                hx-target="#sentence-{{.ID}}" 
+                hx-swap="outerHTML"
+                title="Editar frase"
+                style="background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; transition: 0.2s;">
+            ✏️
+        </button>
+        
+        <button hx-delete="/admin/delete/sentences?id={{.ID}}" 
+                hx-target="#sentence-{{.ID}}" 
+                hx-swap="outerHTML swap:1s" 
+                hx-confirm="¿Estás seguro de que deseas eliminar esta frase?"
+                title="Eliminar frase"
+                style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; transition: 0.2s;">
+            🗑️
+        </button>
+    </div>
+</div>

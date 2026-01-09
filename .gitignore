@@ -1,0 +1,22 @@
+# Binarios de Go
+main
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Variables de Entorno (¡MUY IMPORTANTE!)
+.env
+
+# Archivos subidos por usuarios
+uploads/*
+!uploads/.gitkeep
+
+# Dependencias y Herramientas
+vendor/
+.vscode/
+.idea/
+
+# Logs
+*.log

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard | English At Lima</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <style>
+        :root { --card-bg: #ffffff; --border: #e2e8f0; --primary: #6366f1; }
+        body { font-family: system-ui; background: #f8fafc; padding: 20px; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--border); }
+        .tabs { display: flex; margin-bottom: -1px; }
+        .tab-btn { color:black; padding: 10px 20px; cursor: pointer; border: 1px solid var(--border); background: #eee; border-radius: 5px 5px 0 0; }
+        .tab-btn.active { background: white; border-bottom: 2px solid var(--primary); font-weight: bold; }
+        .module-section { display: none; background: white; border: 1px solid var(--border); padding: 20px; border-radius: 0 8px 8px 8px; }
+        .module-section.active { display: block; }
+        input, button { padding: 8px; margin: 5px 0; border-radius: 4px; border: 1px solid #ccc; }
+        button { background: var(--primary); color: white; cursor: pointer; border: none; }
+        @keyframes success-flash {
+            0% { background-color: #d1fae5; } /* Verde esmeralda claro */
+            100% { background-color: transparent; }
+        }
+
+        .flash-update {
+            animation: success-flash 2s ease-out;
+        }
+        .htmx-swapping {
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 1s ease-out;
+        }
+        .htmx-indicator { display: none; }
+        .htmx-request .htmx-indicator { display: inline; }
+        .htmx-request.btn { pointer-events: none; opacity: 0.6; }
+
+        @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+    </style>
+</head>
+<body>
+    <h1>Panel de Administración</h1>
+
+ <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 1000;"></div>
+
+ <template id="error-toast-template">
+     <div class="error-toast" style="background: #fee2e2; color: #b91c1c; border: 1px solid #ef4444; padding: 15px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease-out;">
+         <span>⚠️</span>
+         <strong id="error-message">Error de validación</strong>
+         <button onclick="this.parentElement.remove()" style="background:none; border:none; color:#b91c1c; cursor:pointer; font-weight:bold;">✕</button>
+     </div>
+ </template>
+
+        <div id="security-alert" 
+             hx-get="/admin/security/stats" 
+             hx-trigger="load, every 10s" 
+             style="cursor: pointer;"
+             hx-target="#blocked-ips-container"
+             hx-select="#security-content">
+            </div>
+
+        <div id="blocked-ips-container" hx-get="/admin/security/ips" hx-trigger="click from:#security-alert"></div>
+
+    <div class="card" style="margin-bottom: 20px; border: 2px solid var(--primary);">
+        <input type="text" name="search" placeholder="🔍 Buscar frase, quiz o recurso..." 
+               hx-get="/admin/search" hx-trigger="keyup changed delay:500ms" hx-target="#main-dashboard-content">
+    </div>
+
+    <div id="main-dashboard-content"></div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'sentences')">🗣️ Frases</button>
+        <button class="tab-btn" onclick="openTab(event, 'quizzes')">📝 Quizzes</button>
+        <button class="tab-btn" onclick="openTab(event, 'resources')">📚 Recursos</button>
+    </div>
+
+   <div id="sentences" class="module-section active">
+       <h3>Gestión de Frases</h3>
+       <form hx-post="/admin/add-sentence" hx-target="#sentence-list" hx-swap="afterbegin" hx-on::after-request="this.reset()">
+           <input type="text" name="english" placeholder="English phrase" required maxlength="100">
+           <input type="text" name="spanish" placeholder="Traducción" required maxlength="100">
+           <button type="submit">Publicar</button>
+       </form>
+       <div id="sentence-list">
+           {{range .Sentences}}{{template "sentence-item.html" .}}{{end}}
+       </div>
+   </div>
+
+   <div id="quizzes" class="module-section">
+       <h3>Gestión de Quizzes</h3>
+       <form hx-post="/admin/add-quiz" hx-target="#quiz-list" hx-swap="afterbegin" hx-on::after-request="this.reset()">
+           <input type="text" name="question" placeholder="Pregunta" required maxlength="100">
+           <input type="text" name="opt1" placeholder="Opción 1" required maxlength="20">
+           <input type="text" name="opt2" placeholder="Opción 2" required maxlength="20">
+           <input type="text" name="opt3" placeholder="Opción 3" required maxlength="20">
+           <input type="number" name="correct" placeholder="N° Opción Correcta (1-3)" required min="1" max="3">
+           <button type="submit">Agregar Quiz</button>
+       </form>
+       <div id="quiz-list">
+           {{range .Quizzes}}{{template "quiz-item.html" .}}{{end}}
+       </div>
+   </div>
+
+ <div id="resources" class="module-section">
+     <h3>Recursos</h3>
+     <form hx-post="/admin/add-resource" 
+           hx-target="#resource-list" 
+           hx-swap="afterbegin" 
+           enctype="multipart/form-data" 
+           hx-on::after-request="this.reset()"
+           class="admin-form">
+         
+         <input type="text" name="title" placeholder="Título del recurso" required  minlength="3" maxlength="100">
+         
+         <select name="type">
+             <option value="video">🎥 Video</option>
+             <option value="pdf">📎 PDF </option>
+             <option value="web">🌐 Web Externa</option>
+         </select>
+
+         <input type="text" name="url" placeholder="URL"  maxlength="100" pattern="https?://.+" 
+       title="Debe incluir http:// o https://">
+
+         <button type="submit" style="margin-top: 10px;">
+             <span class="htmx-indicator">Enviando...</span>
+             <span class="btn-text">Crear Recurso</span>
+         </button>
+     </form>
+     <div id="resource-list">
+         {{range .Resources}}{{template "resource-item.html" .}}{{end}}
+     </div>
+ </div>
+
+   <script>
+    
+       function openTab(evt, tabName) {
+           var i, content, tabs;
+           content = document.getElementsByClassName("module-section");
+           for (i = 0; i < content.length; i++) { content[i].style.display = "none"; }
+           tabs = document.getElementsByClassName("tab-btn");
+           for (i = 0; i < tabs.length; i++) { tabs[i].classList.remove("active"); }
+           document.getElementById(tabName).style.display = "block";
+           evt.currentTarget.classList.add("active");
+       }
+
+      document.body.addEventListener('htmx:afterRequest', function(evt) {
+          if (!evt.detail.successful) {
+              const container = document.getElementById('toast-container');
+              const template = document.getElementById('error-toast-template');
+              const clone = template.content.cloneNode(true);
+              const toastDiv = clone.querySelector('.error-toast');
+              const msgElement = clone.querySelector('#error-message');
+
+             if (evt.detail.xhr.status === 400) {
+                 toastDiv.style.backgroundColor = "#ffedd5";
+                 toastDiv.style.color = "#9a3412";
+                 toastDiv.style.borderColor = "#fb923c";
+                 // USAR EL MENSAJE QUE VIENE DEL SERVIDOR
+                 msgElement.innerText = evt.detail.xhr.responseText || "Error de formato.";
+             } else if (evt.detail.xhr.status === 500) {
+                 toastDiv.style.backgroundColor = "#fee2e2";
+                 toastDiv.style.color = "#b91c1c";
+                 toastDiv.style.borderColor = "#ef4444";
+                 msgElement.innerText = "Error crítico: " + (evt.detail.xhr.responseText || "Base de datos rechazo la entrada.");
+             }
+
+              container.appendChild(clone);
+              
+              // Auto-remove
+              setTimeout(() => {
+                  const toast = container.lastElementChild;
+                  if(toast) {
+                      toast.style.opacity = '0';
+                      setTimeout(() => toast.remove(), 500);
+                  }
+              }, 4000);
+          }
+      });
+   </script>
+   
+</body>
+</html>

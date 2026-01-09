@@ -1,0 +1,23 @@
+<div id="quiz-{{.ID}}" class="card item flash-update" style="border-left: 5px solid #2563eb; margin-bottom: 15px;">
+    <div style="display: flex; justify-content: space-between;">
+        <div>
+            <strong>{{.Question}}</strong>
+            <ul style="font-size: 0.9em; margin: 5px 0;">
+                <li>1. {{.Option1}}</li>
+                <li>2. {{.Option2}}</li>
+                <li>3. {{.Option3}}</li>
+            </ul>
+            <small>Correcta: Opción {{.Correct}}</small>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <button hx-get="/admin/edit/quiz?id={{.ID}}&question={{.Question}}&opt1={{.Option1}}&opt2={{.Option2}}&opt3={{.Option3}}&correct={{.Correct}}" 
+                    hx-target="#quiz-{{.ID}}" 
+                    hx-swap="outerHTML" 
+                    style="background: #2563eb;">✏️</button>
+            <button hx-delete="/admin/delete/quizzes?id={{.ID}}" 
+                    hx-target="#quiz-{{.ID}}" 
+                    hx-swap="outerHTML swap:1s" 
+                    style="background: #ef4444;">🗑️</button>
+        </div>
+    </div>
+</div>

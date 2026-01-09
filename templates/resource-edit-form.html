@@ -1,0 +1,45 @@
+<form hx-post="/admin/resource/update" 
+      hx-target="#res-{{.ID}}" 
+      hx-swap="outerHTML" 
+      enctype="multipart/form-data" 
+      class="card" 
+      style="border: 2px solid #6366f1; padding: 15px; margin-bottom: 10px;">
+    
+    <input type="hidden" name="id" value="{{.ID}}">
+    <input type="hidden" name="old_url" value="{{.URL}}">
+    
+    <div style="margin-bottom: 10px;">
+        <label>Título del Recurso:</label><br>
+        <input type="text" name="title" value="{{.Title}}" style="width: 100%;" required maxlength="100">
+    </div>
+
+    <div style="margin-bottom: 10px;">
+        <label>Tipo:</label>
+        <select name="type" style="width: 100%;">
+            <option value="video" {{if eq .Type "video"}}selected{{end}}>🎥 Video</option>
+            <option value="pdf" {{if eq .Type "pdf"}}selected{{end}}>📎 PDF</option>
+            <option value="web" {{if eq .Type "web"}}selected{{end}}>🌐 Web Exterior</option>
+        </select>
+    </div>
+
+    <div style="margin-bottom: 10px;">
+        <label>URL actual:</label>
+        <input type="text" name="url" value="{{.URL}}" style="width: 100%;" maxlength="100">
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+        <button type="submit" 
+                hx-indicator="#loading-{{.ID}}"
+                style="background: #10b981; flex: 1;">
+            Guardar Cambios
+            <span id="loading-{{.ID}}" class="htmx-indicator">⏳...</span>
+        </button>
+        <button type="button" 
+                hx-get="/admin/cancel/resource?id={{.ID}}&title={{.Title}}&url={{.URL}}&type={{.Type}}" 
+                hx-target="closest form" 
+                hx-swap="outerHTML" 
+                style="background: #94a3b8; flex: 1;">
+            Cancelar
+        </button>
+    </div>
+</form>
