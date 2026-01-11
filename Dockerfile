@@ -13,7 +13,7 @@ RUN go mod download
 COPY . .
 
 # Compilación estática optimizada
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o english_admin .
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o english_admin ./server/main.go
 
 # --- FASE 2: Ejecución (Runtime) ---
 FROM alpine:3.21
