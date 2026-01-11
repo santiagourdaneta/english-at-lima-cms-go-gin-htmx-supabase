@@ -16,7 +16,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o english_admin .
 
 # --- FASE 2: Ejecución (Runtime) ---
-FROM alpine:3.21
+FROM alpine:3.23
 
 # Instalar dependencias mínimas para HTTPS y Timezones
 RUN apk --no-cache add ca-certificates tzdata
