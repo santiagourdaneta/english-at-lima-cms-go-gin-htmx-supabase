@@ -30,5 +30,5 @@ check:
 # Este comando lo ejecutas DESPUÉS de tu git push
 notify:
 	@echo "🔔 Notificando a Render para actualizar el servicio..."
-	@curl -s -X GET $(RENDER_DEPLOY_HOOK) > /dev/null
-	@echo "🚀 Despliegue en marcha en Render."
+	@curl -s -X GET "$(RENDER_DEPLOY_HOOK)?clear_cache=1" > /dev/null
+	@echo "🚀 Despliegue en marcha con limpieza de caché en Render."
