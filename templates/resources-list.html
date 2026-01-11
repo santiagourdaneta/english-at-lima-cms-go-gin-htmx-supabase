@@ -1,0 +1,41 @@
+<article>
+    <header>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="margin: 0;">📚 Recursos y PDFs</h4>
+            <a href="/admin/resources/export" class="outline secondary" download>
+                📥 Exportar CSV
+            </a>
+            <button class="contrast" hx-get="/admin/resources/new" hx-target="#main-panel"> + Nuevo Recurso</button>
+        </div>
+    </header>
+    <div class="results-grid">
+        {{range .Resources}}
+        <article style="padding: 1rem; margin-bottom: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div>
+                    <strong>{{.Title}}</strong><br>
+                    <small class="secondary">{{.Type}}</small>
+                </div>
+                <div role="group">
+                    <a href="{{.URL}}" target="_blank" role="button" class="outline secondary">🔗</a>
+                    <button class="outline contrast"
+        hx-delete="/admin/sentences/{{.ID}}" 
+        hx-confirm="¿Eliminar este elemento?"
+        hx-target="closest article"
+        hx-swap="outerHTML swap:0.5s">
+    🗑️ Borrar
+</button>
+                </div>
+            </div>
+        </article>
+        {{end}}
+    </div>
+</article>
+
+<style>
+    .results-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1rem;
+    }
+</style>

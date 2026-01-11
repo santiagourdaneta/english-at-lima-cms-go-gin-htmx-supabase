@@ -1,0 +1,29 @@
+<article>
+    <header>
+        <strong>Añadir Nueva Frase</strong>
+    </header>
+    <form hx-post="/admin/sentences/save" hx-target="#main-panel">
+        <div class="grid">
+            <label for="english">
+                Inglés
+                <input minlength="5" 
+               maxlength="500" type="text" id="english" name="english" placeholder="Ej: How are you?" required hx-post="/admin/sentences/validate" 
+       hx-trigger="keyup changed delay:500ms" 
+       hx-target="#validation-msg">
+       <span id="validation-msg"></span>
+            </label>
+            <label for="spanish">
+                Español
+                <input minlength="5" 
+               maxlength="500" type="text" id="spanish" name="spanish" placeholder="Ej: ¿Cómo estás?" required hx-post="/admin/sentences/validate" 
+       hx-trigger="keyup changed delay:500ms" 
+       hx-target="#validation-msg">
+       <span id="validation-msg"></span>
+            </label>
+        </div>
+        <footer style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" class="secondary" hx-get="/admin/sentences" hx-target="#main-panel">Cancelar</button>
+            <button type="submit">Guardar Frase</button>
+        </footer>
+    </form>
+</article>

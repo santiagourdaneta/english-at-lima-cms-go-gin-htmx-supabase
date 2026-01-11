@@ -1,0 +1,1 @@
+go test -v internal/handlers/stress_test.go

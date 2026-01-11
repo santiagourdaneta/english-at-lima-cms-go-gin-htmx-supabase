@@ -1,0 +1,16 @@
+linters-settings:
+  gocyclo:
+    min-complexity: 10 # Si una función es muy enredada, falla.
+  funlen:
+    lines: 60          # Si una función tiene más de 60 líneas, falla.
+  gocognit:
+    min-complexity: 15 # Mide qué tan difícil es de entender el código.
+
+linters:
+  enable:
+    - gocyclo    # Control de complejidad
+    - funlen     # Control de longitud de funciones
+    - gocognit   # Control de carga cognitiva
+    - errcheck   # Verifica que no ignores errores
+    - bodyclose  # Verifica que cierres conexiones HTTP
+    - govet      # Análisis oficial de Go

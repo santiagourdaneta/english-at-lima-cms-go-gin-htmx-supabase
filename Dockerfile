@@ -1,38 +1,42 @@
 # --- FASE 1: Compilación ---
-FROM golang:1.21-alpine AS builder
+# Usamos una versión específica y estable para evitar sorpresas
+FROM golang:1.25-alpine AS builder
 
-# Instalamos git por si alguna dependencia lo necesita
 RUN apk add --no-cache git
 
-# Definimos el directorio de trabajo
 WORKDIR /app
 
-# Copiamos los archivos de módulos primero para aprovechar el caché de Docker
+# Aprovechar el caché de capas de Docker para dependencias
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copiamos el resto del código fuente
 COPY . .
 
-# Compilamos el binario con optimizaciones de producción (sin debug info)
+# Compilación estática optimizada
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o english_admin .
 
-# --- FASE 2: Ejecución ---
-FROM alpine:latest  
+# --- FASE 2: Ejecución (Runtime) ---
+FROM alpine:3.21
 
-# Instalamos certificados CA (necesarios para conectar con Supabase/SSL)
-RUN apk --no-cache add ca-certificates
+# Instalar dependencias mínimas para HTTPS y Timezones
+RUN apk --no-cache add ca-certificates tzdata
 
-WORKDIR /root/
+WORKDIR /app
 
-# Copiamos el binario desde la fase de compilación
+# Copiar el binario
 COPY --from=builder /app/english_admin .
 
-# Copiamos la carpeta de templates (esencial para Gin)
+# --- IMPORTANTE: Copiar todos los assets necesarios ---
+# Gin necesita templates y static para renderizar la web
 COPY --from=builder /app/templates ./templates
+COPY --from=builder /app/static ./static
 
-# Exponemos el puerto que usa tu servidor
+# Crear carpeta de uploads con permisos (necesaria para tus recursos PDF)
+RUN mkdir ./uploads
+
 EXPOSE 8080
 
-# Comando para arrancar la aplicación
+# Usar variables de entorno por defecto (pueden ser sobrescritas)
+ENV GIN_MODE=release
+
 CMD ["./english_admin"]

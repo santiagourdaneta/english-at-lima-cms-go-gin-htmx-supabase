@@ -1,0 +1,50 @@
+<article>
+    <header>
+        <div style="text-align: center;">
+            <h4 style="margin: 0;">📝 Gestión de Frases</h4>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            
+            <a href="/admin/sentences/export" class="outline secondary" download>
+                📥 Exportar CSV
+            </a>
+            <button class="contrast" hx-get="/admin/sentences/new" hx-target="#main-panel"> + Nueva Frase</button>
+        </div>
+    </header>
+    <div class="overflow-auto">
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Inglés</th>
+                    <th>Español</th>
+                    <th style="text-align: right;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Sentences}}
+                <tr>
+                    <td><strong>{{.English}}</strong></td>
+                    <td>{{.Spanish}}</td>
+                    <td style="text-align: right;">
+                        <div role="group">
+                            <button class="outline secondary" title="Editar"
+                                    hx-get="/admin/sentences/edit/{{.ID}}" 
+                                    hx-target="#main-panel">✏️</button>
+                            <button class="outline contrast"
+        hx-delete="/admin/sentences/{{.ID}}" 
+        hx-confirm="¿Eliminar este elemento?"
+        hx-target="closest tr" 
+        hx-swap="outerHTML swap:0.5s">
+    🗑️ Borrar
+</button>
+                        </div>
+                    </td>
+                </tr>
+                {{else}}
+                <tr><td colspan="3" style="text-align: center;">No hay frases registradas.</td></tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</article>

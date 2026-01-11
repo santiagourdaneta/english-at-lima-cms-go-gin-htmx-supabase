@@ -1,10 +1,60 @@
-{{if .Sentences}}
-    <p style="color: #666; font-size: 0.9em;">Resultados encontrados: {{len .Sentences}}</p>
-    {{range .Sentences}}
-        {{template "sentence-item.html" .}}
+<div class="search-results-wrapper">
+    <p>Resultados para: <strong>"{{.Query}}"</strong></p>
+    <hr>
+
+    {{if .Sentences}}
+    <section>
+        <h5>🗣️ Frases</h5>
+        {{range .Sentences}}
+        <article class="search-item readonly">
+            <strong>{{.English}}</strong>
+            <p style="margin:0; font-size: 0.9rem; color: var(--secondary);">{{.Spanish}}</p>
+        </article>
+        {{end}}
+    </section>
     {{end}}
-{{else}}
-    <div class="card" style="text-align: center; color: #999;">
-        <p>No se encontraron frases que coincidan con la búsqueda.</p>
-    </div>
-{{end}}
+
+    {{if .Quizzes}}
+    <section>
+        <h5>📝 Quizzes</h5>
+        {{range .Quizzes}}
+        <article class="search-item readonly" style="border-left: 4px solid #f59e0b;">
+            <strong>{{.Question}}</strong>
+        </article>
+        {{end}}
+    </section>
+    {{end}}
+
+    {{if .Resources}}
+    <section>
+        <h5>📚 Recursos</h5>
+        {{range .Resources}}
+        <article class="search-item readonly" style="border-left: 4px solid #10b981; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <strong>{{.Title}}</strong><br>
+                <small>{{.Type}}</small>
+            </div>
+            <a href="{{.URL}}" target="_blank" role="button" class="outline secondary">Ver Recurso 🔗</a>
+        </article>
+        {{end}}
+    </section>
+    {{end}}
+
+    {{if not .Sentences}}{{if not .Quizzes}}{{if not .Resources}}
+    <article style="text-align: center; border: 1px dashed #ccc;">
+        <p>No se encontraron coincidencias.</p>
+    </article>
+    {{end}}{{end}}{{end}}
+</div>
+
+<style>
+    .search-item.readonly {
+        padding: 0.75rem 1rem !important;
+        margin-bottom: 0.5rem !important;
+        background-color: #f9f9f9;
+        cursor: default; /* Indica que no es clickeable */
+    }
+    .search-item.readonly strong {
+        color: var(--primary);
+    }
+</style>

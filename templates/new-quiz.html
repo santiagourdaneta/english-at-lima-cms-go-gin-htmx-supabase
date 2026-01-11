@@ -1,0 +1,24 @@
+<article>
+    <header><strong>Nuevo Quiz</strong></header>
+    <form hx-post="/admin/quizzes/save" hx-target="#main-panel">
+        <label>Pregunta
+            <input type="text" name="question" required>
+        </label>
+        <div class="grid">
+            <label>Opción 1 <input type="text" name="opt1" required></label>
+            <label>Opción 2 <input type="text" name="opt2" required></label>
+            <label>Opción 3 <input type="text" name="opt3" required></label>
+        </div>
+        <label>Opción Correcta
+            <select name="correct" required>
+                <option value="1">Opción 1</option>
+                <option value="2">Opción 2</option>
+                <option value="3">Opción 3</option>
+            </select>
+        </label>
+        <footer style="display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="secondary" hx-get="/admin/quizzes" hx-target="#main-panel">Cancelar</button>
+            <button type="submit">Guardar Quiz</button>
+        </footer>
+    </form>
+</article>

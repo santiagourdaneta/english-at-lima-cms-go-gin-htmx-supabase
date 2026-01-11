@@ -1,0 +1,46 @@
+<article>
+    <header>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="margin: 0;">📝 Gestión de Quizzes</h4>
+            <a href="/admin/quizzes/export" class="outline secondary" download>
+                📥 Exportar CSV
+            </a>
+            <button class="contrast" hx-get="/admin/quizzes/new" hx-target="#main-panel"> + Nuevo Quiz</button>
+        </div>
+    </header>
+    <div class="overflow-auto">
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Pregunta</th>
+                    <th>Opciones</th>
+                    <th>Correcta</th>
+                    <th style="text-align: right;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Quizzes}}
+                <tr>
+                    <td><strong>{{.Question}}</strong></td>
+                    <td>
+                        <small>1. {{.Opt1}} | 2. {{.Opt2}} | 3. {{.Opt3}}</small>
+                    </td>
+                    <td><mark>{{.Correct}}</mark></td>
+                    <td style="text-align: right;">
+                        <div role="group">
+                            <button class="outline secondary" hx-get="/admin/quizzes/edit/{{.ID}}" hx-target="#main-panel">✏️</button>
+                            <button class="outline contrast"
+        hx-delete="/admin/sentences/{{.ID}}" 
+        hx-confirm="¿Eliminar este elemento?"
+        hx-target="closest tr" 
+        hx-swap="outerHTML swap:0.5s">
+    🗑️ Borrar
+</button>
+                        </div>
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</article>

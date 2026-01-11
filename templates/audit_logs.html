@@ -1,0 +1,32 @@
+<div class="container">
+    <h2>Registro de Intrusiones</h2>
+    <table role="grid">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>IP</th>
+                <th>Evento</th>
+                <th>Dato Malicioso</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .logs}}
+            <tr style="color: {{if eq .event_type "XSS_ATTEMPT"}}#e74c3c{{else}}#f1c40f{{end}}">
+                <td>{{.created_at}}</td>
+                <td><strong>{{.ip_address}}</strong></td>
+                <td><mark>{{.event_type}}</mark></td>
+                <td><code>{{.input_data}}</code></td>
+                <td>
+                <button class="outline contrast"
+                        hx-post="/admin/logs/ban/{{.ip_address}}"
+                        hx-confirm="¿Deseas bloquear permanentemente esta IP?"
+                        hx-swap="none">
+                    Banear IP
+                </button>
+            </td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+</div>
