@@ -1,42 +1,23 @@
-# --- FASE 1: Compilación ---
-# Usamos una versión específica y estable para evitar sorpresas
-FROM golang:1.24-alpine AS builder
-
-RUN apk add --no-cache git
-
+# 1. Etapa de construcción (Build)
+FROM golang:1.21-alpine AS builder
 WORKDIR /app
-
-# Aprovechar el caché de capas de Docker para dependencias
+# Copiar archivos de dependencias
 COPY go.mod go.sum ./
 RUN go mod download
-
+# Copiar todo el código (incluyendo la carpeta server y templates)
 COPY . .
+# Compilar el binario desde la subcarpeta server
+RUN go build -o main server/main.go
 
-# Compilación estática optimizada
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o english_admin ./server/main.go
-
-# --- FASE 2: Ejecución (Runtime) ---
-FROM alpine:3.21
-
-# Instalar dependencias mínimas para HTTPS y Timezones
-RUN apk --no-cache add ca-certificates tzdata
-
-WORKDIR /app
-
-# Copiar el binario
-COPY --from=builder /app/english_admin .
-
-# --- IMPORTANTE: Copiar todos los assets necesarios ---
-# Gin necesita templates y static para renderizar la web
+# 2. Etapa de ejecución (Runtime)
+FROM alpine:latest
+WORKDIR /root/
+# MUY IMPORTANTE: Copiar el binario Y la carpeta de templates del builder
+COPY --from=builder /app/main .
 COPY --from=builder /app/templates ./templates
-COPY --from=builder /app/static ./static
 
-# Crear carpeta de uploads con permisos (necesaria para tus recursos PDF)
-RUN mkdir ./uploads
-
+# Exponer el puerto (Render usa el puerto que definas o 8080 por defecto)
 EXPOSE 8080
 
-# Usar variables de entorno por defecto (pueden ser sobrescritas)
-ENV GIN_MODE=release
-
-CMD ["./english_admin"]
+# Ejecutar el binario
+CMD ["./main"]

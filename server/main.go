@@ -32,12 +32,20 @@ func main() {
 	r.Use(MaxAllowedSize(2 << 20))
 
 	// 1. Configurar el almacenamiento de la sesión (usa una clave secreta)
-	store := cookie.NewStore([]byte("secret-key-english-at-lima"))
+store := cookie.NewStore([]byte(os.Getenv("SESSION_SECRET")))
+store.Options(sessions.Options{
+    Path:     "/",
+    MaxAge:   3600 * 8, // 8 horas
+    HttpOnly: true,
+    Secure:   true,     // OBLIGATORIO para Render (HTTPS)
+    SameSite: http.SameSiteLaxMode,
+})
+r.Use(sessions.Sessions("mysession", store))
 
 	// 2. Aplicar el middleware de sesiones a TODO el servidor
 	r.Use(sessions.Sessions("mysession", store))
 
-	r.LoadHTMLGlob("templates/*")
+	router.LoadHTMLGlob("templates/*.html")
 	r.Static("/static", "./static")
 
 	_ = r.Run(":8080")
