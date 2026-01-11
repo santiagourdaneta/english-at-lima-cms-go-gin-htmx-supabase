@@ -54,7 +54,7 @@ func Logout(c *gin.Context) {
 	}
 
 	// 4. Forzamos la expiración de la cookie
-	c.SetCookie("mysession", "", -1, "/", "", false, true)
+	c.SetCookie("mysession", "", -1, "/", "", true, true)
 
 	// 5. Redirigimos al login
 	c.Redirect(http.StatusSeeOther, "/login")
