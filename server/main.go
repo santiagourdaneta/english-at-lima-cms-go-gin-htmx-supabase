@@ -60,6 +60,10 @@ func setupRouter() *gin.Engine {
 	r.POST("/login", middleware.RateLimiter(), handlers.Login)
 	r.GET("/logout", handlers.Logout) // Logout general
 
+	r.GET("/", func(c *gin.Context) {
+    c.JSON(200, gin.H{"message": "Servidor funcionando"})
+})
+
 	// Grupo Admin PROTEGIDO
 	admin := r.Group("/admin")
 	admin.Use(middleware.AuthRequired())
